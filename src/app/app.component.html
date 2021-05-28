@@ -1,0 +1,297 @@
+<div
+  fxFlex="100"
+  style="margin-left: 2rem; margin-right: 1rem"
+  fxLayoutAlign="center"
+>
+  <mat-tab-group fxFlex="95" style="overflow-x: hidden">
+    <!-- <mat-tab label="pin" hidden="true">
+      <form>
+        <mat-form-field>
+          <mat-label>Pincode</mat-label>
+          <input matInput placeholder="pin" [(ngModel)]="pinCode" />
+        </mat-form-field>
+        <button mat-raised-button color="primary" (click)="searchByPin(pinCode)">
+          Search
+        </button>
+      </form>
+    </mat-tab> -->
+    <mat-tab
+      fxLayout="column"
+      label="district"
+      fxFlex="100"
+      fxLayoutAlign="center"
+    >
+      <div
+        fxLayout="column"
+        fxFlex="100"
+        fxLayoutAlign="center"
+        style="overflow-x: hidden"
+      >
+        <form fxLayout="column" fxFlex="100">
+          <!-- <mat-form-field appearance="fill">
+            <mat-label>State</mat-label>
+            <mat-select
+              (valueChange)="getDistById($event)"
+              [(ngModel)]="stateCode"
+              name="stateCode"
+            >
+              <mat-option
+                *ngFor="let item of stateList.states"
+                [value]="item.state_id"
+              >
+                {{ item.state_name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field> -->
+          <mat-form-field appearance="fill">
+            <mat-label>District</mat-label>
+            <mat-select [(ngModel)]="districtId" name="Center">
+              <mat-option
+                *ngFor="let item of districtList.districts"
+                [value]="item.district_id"
+              >
+                {{ item.district_name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <div fxLayoutAlign="center">
+            <mat-button-toggle-group
+              name="dose"
+              [(ngModel)]="config.dose1"
+              aria-label="Font Style"
+            >
+              <mat-button-toggle [value]="true">Dose 1</mat-button-toggle>
+              <mat-button-toggle [value]="false">Dose 2</mat-button-toggle>
+            </mat-button-toggle-group>
+          </div>
+          <div fxLayoutAlign="center">
+            <mat-slider
+              min="10000"
+              max="120000"
+              step="10000"
+              [(ngModel)]="config.timeInterval"
+              name="timer"
+            ></mat-slider>
+            <div style="line-height: 3rem; margin-left: 1rem">
+              <p>{{ config.timeInterval }}</p>
+            </div>
+          </div>
+          <div fxLayoutAlign="center">
+            <div fxLayoutAlign="center">
+              <div fxLayoutGap="2rem">
+                <mat-form-field appearance="outline">
+                  <mat-label>Pincode set 1</mat-label>
+                  <input
+                    matInput
+                    placeholder="pin list 1"
+                    [(ngModel)]="pinCode.pinCode"
+                    name="pinCode"
+                  />
+                </mat-form-field>
+                <mat-checkbox name="18plus" [(ngModel)]="pinCode.is18Only"
+                  >18 plus only</mat-checkbox
+                >
+              </div>
+
+              <mat-icon
+                aria-hidden="false"
+                aria-label="Example home icon blob"
+                *ngIf="respList.a.length"
+                >arrow_back</mat-icon
+              >
+            </div>
+            <div fxLayoutAlign="center">
+              <div fxLayoutGap="2rem">
+                <mat-form-field appearance="outline">
+                  <mat-label>Pincode set 2</mat-label>
+                  <input
+                    matInput
+                    placeholder="pin list 2"
+                    [(ngModel)]="pinCode2.pinCode"
+                    name="pinCode2"
+                  />
+                </mat-form-field>
+                <mat-checkbox name="18plus" [(ngModel)]="pinCode2.is18Only"
+                  >18 plus only</mat-checkbox
+                >
+              </div>
+              <mat-icon
+                aria-hidden="false"
+                aria-label="Example home icon"
+                *ngIf="respList.b.length"
+                >arrow_back</mat-icon
+              >
+            </div>
+            <mat-spinner
+              style="margin-left: 5rem"
+              diameter="50"
+              fxLayoutAlign="center"
+              *ngIf="spinner"
+            ></mat-spinner>
+          </div>
+
+          <div fxLayoutAlign="center" fxLayoutGap="2rem">
+            <button
+              mat-raised-button
+              color="primary"
+              (click)="searchByDist(districtId)"
+            >
+              Search
+            </button>
+            <button
+              mat-raised-button
+              color="primary"
+              (click)="searchByDistloop(districtId)"
+            >
+              Startloop
+            </button>
+
+            <button
+              mat-raised-button
+              color="primary"
+              (click)="stopLoop(districtId)"
+            >
+              Stoploop
+            </button>
+          </div>
+        </form>
+        <mat-card *ngIf="respList.a.length" fxFlex="80">
+          <mat-card-content>
+            <h3>Pin Code 1</h3>
+            <mat-list>
+              <mat-list-item
+                *ngFor="let item of respList.a; let i = index"
+                style="margin: 2rem"
+                fxFlexLayout="start"
+              >
+                <table fxFlex="40">
+                  <th style="text-align: left">
+                    {{
+                      i +
+                        1 +
+                        " " +
+                        item.name +
+                        " " +
+                        item.block_name +
+                        " " +
+                        item.pincode
+                    }}
+                    <button mat-mini-fab (click)="copyPinCode(item.pincode)">
+                      <mat-icon>bookmark</mat-icon>
+                    </button>
+                  </th>
+                </table>
+                <table fxFlex="50">
+                  <td>
+                    <tr style="border: 1px solid">
+                      <th style="border: 1px solid">Vaccine Name</th>
+                      <th style="border: 1px solid">Age Limit</th>
+                      <th style="border: 1px solid">
+                        {{ config.dose1 ? "DOSE 1" : "DOSE 2" }}
+                      </th>
+                    </tr>
+                    <tr *ngFor="let s of item.sessions">
+                      <td style="border: 1px solid">{{ s.vaccine }}</td>
+                      <td style="border: 1px solid">{{ s.min_age_limit }}</td>
+                      <td style="border: 1px solid">
+                        {{
+                          config.dose1
+                            ? "DOSE 1 Count-" + s.available_capacity_dose1
+                            : "DOSE 2 Count-" + s.available_capacity_dose2
+                        }}
+                      </td>
+                    </tr>
+                    <!-- <ul>
+                      <li *ngFor="let s of item.sessions">
+                        {{
+                          s.vaccine +
+                            " " +
+                            s.min_age_limit +
+                            " " +
+                            (config.dose1
+                              ? s.available_capacity_dose1
+                              : s.available_capacity_dose2)
+                        }}
+                      </li>
+                    </ul> -->
+                  </td>
+                </table>
+
+                &nbsp;
+              </mat-list-item>
+            </mat-list>
+          </mat-card-content>
+        </mat-card>
+        <hr />
+        <mat-card *ngIf="respList.b.length" fxFlex="90">
+          <mat-card-content>
+            <h3>Pin Code 2</h3>
+            <mat-list>
+              <mat-list-item
+                *ngFor="let item of respList.b; let i = index"
+                style="margin: 2rem"
+                fxFlexLayout="start"
+              >
+                <table fxFlex="40">
+                  <th style="text-align: left">
+                    {{
+                      i +
+                        1 +
+                        " " +
+                        item.name +
+                        " " +
+                        item.block_name +
+                        " " +
+                        item.pincode
+                    }}
+                    <button mat-mini-fab (click)="copyPinCode(item.pincode)">
+                      <mat-icon>bookmark</mat-icon>
+                    </button>
+                  </th>
+                </table>
+                <table fxFlex="50">
+                  <td>
+                    <tr style="border: 1px solid">
+                      <th style="border: 1px solid">Vaccine Name</th>
+                      <th style="border: 1px solid">Age Limit</th>
+                      <th style="border: 1px solid">
+                        {{ config.dose1 ? "DOSE 1" : "DOSE 2" }}
+                      </th>
+                    </tr>
+                    <tr *ngFor="let s of item.sessions">
+                      <td style="border: 1px solid">{{ s.vaccine }}</td>
+                      <td style="border: 1px solid">{{ s.min_age_limit }}</td>
+                      <td style="border: 1px solid">
+                        {{
+                          config.dose1
+                            ? "DOSE 1 Count-" + s.available_capacity_dose1
+                            : "DOSE 2 Count-" + s.available_capacity_dose2
+                        }}
+                      </td>
+                    </tr>
+                    <!-- <ul>
+                    <li *ngFor="let s of item.sessions">
+                      {{
+                        s.vaccine +
+                          " " +
+                          s.min_age_limit +
+                          " " +
+                          (config.dose1
+                            ? s.available_capacity_dose1
+                            : s.available_capacity_dose2)
+                      }}
+                    </li>
+                  </ul> -->
+                  </td>
+                </table>
+
+                &nbsp;
+              </mat-list-item>
+            </mat-list>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</div>
