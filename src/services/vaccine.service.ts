@@ -9,11 +9,12 @@ import { of } from "rxjs";
 
 import { Vaccine } from "src/models/vaccine-info";
 import { Observable } from "rxjs";
+import { DataService } from "./data.service";
 @Injectable({
   providedIn: "root",
 })
 export class VaccineService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private data: DataService) {}
 
   getVaccineListByPin(pincode: string, date: string) {
     const opts = {
@@ -39,8 +40,8 @@ export class VaccineService {
       }),
       headers: this.setHeader(),
     };
-    return this.http.get<Vaccine>(VaccineUrl.SearchByDist, opts);
-    // return of(this.vaccineMock);
+    // return this.http.get<Vaccine>(VaccineUrl.SearchByDist, opts);
+    return of(this.data.vaccineMock);
   }
 
   setHeader() {

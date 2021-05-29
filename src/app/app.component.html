@@ -1,6 +1,9 @@
 <div
   fxFlex="100"
-  style="margin-left: 2rem; margin-right: 1rem"
+  [ngStyle.gt-sm]="{
+    'margin-left': ' 2rem',
+    'margin-right': '2rem'
+  }"
   fxLayoutAlign="center"
 >
   <mat-tab-group fxFlex="95" style="overflow-x: hidden">
@@ -55,31 +58,47 @@
             </mat-select>
           </mat-form-field>
 
-          <div fxLayoutAlign="center">
-            <mat-button-toggle-group
-              name="dose"
-              [(ngModel)]="config.dose1"
-              aria-label="Font Style"
-            >
-              <mat-button-toggle [value]="true">Dose 1</mat-button-toggle>
-              <mat-button-toggle [value]="false">Dose 2</mat-button-toggle>
-            </mat-button-toggle-group>
-          </div>
-          <div fxLayoutAlign="center">
-            <mat-slider
-              min="10000"
-              max="120000"
-              step="10000"
-              [(ngModel)]="config.timeInterval"
-              name="timer"
-            ></mat-slider>
-            <div style="line-height: 3rem; margin-left: 1rem">
-              <p>{{ config.timeInterval }}</p>
+          <div fxLayout="row" fxLayoutAlign="center stretch">
+            <div>
+              <mat-button-toggle-group
+                name="dose"
+                [(ngModel)]="config.dose1"
+                aria-label="Font Style"
+              >
+                <mat-button-toggle [value]="true">Dose 1</mat-button-toggle>
+                <mat-button-toggle [value]="false">Dose 2</mat-button-toggle>
+              </mat-button-toggle-group>
+            </div>
+            <div fxLayout="column">
+              <mat-slider
+                fxLayoutAlign="start center"
+                min="10000"
+                max="120000"
+                step="10000"
+                [(ngModel)]="config.timeInterval"
+                name="timer"
+              ></mat-slider>
+              <div style="margin-top: -1rem" fxLayoutAlign="center">
+                timer:{{ config.timeInterval }}
+              </div>
             </div>
           </div>
-          <div fxLayoutAlign="center">
-            <div fxLayoutAlign="center">
-              <div fxLayoutGap="2rem">
+
+          <div
+            fxLayoutAlign="center"
+            fxLayout.lt-md="column"
+            fxLayoutAlign.lt-md="center"
+            fxLayoutGap=".3rem"
+          >
+            <div
+              fxLayoutAlign="center"
+              fxFlex.lt-md="100"
+              [ngStyle.gt-sm]="{
+                'border-right': '1px solid',
+                'padding-right': '.5rem'
+              }"
+            >
+              <div fxLayoutGap="2rem" fxLayout.lt-md="row">
                 <mat-form-field appearance="outline">
                   <mat-label>Pincode set 1</mat-label>
                   <input
@@ -89,7 +108,10 @@
                     name="pinCode"
                   />
                 </mat-form-field>
-                <mat-checkbox name="18plus" [(ngModel)]="pinCode.is18Only"
+                <mat-checkbox
+                  fxLayoutAlign.lt-md="center center"
+                  name="18plus"
+                  [(ngModel)]="pinCode.is18Only"
                   >18 plus only</mat-checkbox
                 >
               </div>
@@ -101,8 +123,12 @@
                 >arrow_back</mat-icon
               >
             </div>
-            <div fxLayoutAlign="center">
-              <div fxLayoutGap="2rem">
+            <div fxLayoutAlign="center" fxFlex.lt-md="100">
+              <div
+                fxLayoutGap="2rem"
+                fxLayout.lt-md="row"
+                fxLayoutAlign.lt-md="center center"
+              >
                 <mat-form-field appearance="outline">
                   <mat-label>Pincode set 2</mat-label>
                   <input
@@ -112,7 +138,11 @@
                     name="pinCode2"
                   />
                 </mat-form-field>
-                <mat-checkbox name="18plus" [(ngModel)]="pinCode2.is18Only"
+
+                <mat-checkbox
+                  fxLayoutAlign.lt-md="center center"
+                  name="18plus"
+                  [(ngModel)]="pinCode2.is18Only"
                   >18 plus only</mat-checkbox
                 >
               </div>
@@ -123,14 +153,14 @@
                 >arrow_back</mat-icon
               >
             </div>
+          </div>
+          <div fxLayoutAlign="center" fxFlex="100" style="margin-bottom: 1rem">
             <mat-spinner
-              style="margin-left: 5rem"
               diameter="50"
               fxLayoutAlign="center"
               *ngIf="spinner"
             ></mat-spinner>
           </div>
-
           <div fxLayoutAlign="center" fxLayoutGap="2rem">
             <button
               mat-raised-button
@@ -158,14 +188,16 @@
         </form>
         <mat-card *ngIf="respList.a.length" fxFlex="80">
           <mat-card-content>
-            <h3>Pin Code 1</h3>
-            <mat-list>
-              <mat-list-item
-                *ngFor="let item of respList.a; let i = index"
-                style="margin: 2rem"
-                fxFlexLayout="start"
-              >
-                <table fxFlex="40">
+            <h3><strong>Pin Code 1 </strong></h3>
+
+            <div
+              *ngFor="let item of respList.a; let i = index"
+              fxFlexLayout="center"
+              fxLayout.gt-sm="row"
+              fxLayout.lt-md="column"
+            >
+              <div fxFlex.gt-sm="40" fxFlex.lt-md="100" fxLayout="row">
+                <table>
                   <th style="text-align: left">
                     {{
                       i +
@@ -177,63 +209,55 @@
                         " " +
                         item.pincode
                     }}
-                    <button mat-mini-fab (click)="copyPinCode(item.pincode)">
-                      <mat-icon>bookmark</mat-icon>
-                    </button>
                   </th>
                 </table>
-                <table fxFlex="50">
-                  <td>
-                    <tr style="border: 1px solid">
-                      <th style="border: 1px solid">Vaccine Name</th>
-                      <th style="border: 1px solid">Age Limit</th>
-                      <th style="border: 1px solid">
-                        {{ config.dose1 ? "DOSE 1" : "DOSE 2" }}
-                      </th>
-                    </tr>
-                    <tr *ngFor="let s of item.sessions">
-                      <td style="border: 1px solid">{{ s.vaccine }}</td>
-                      <td style="border: 1px solid">{{ s.min_age_limit }}</td>
-                      <td style="border: 1px solid">
-                        {{
-                          config.dose1
-                            ? "DOSE 1 Count-" + s.available_capacity_dose1
-                            : "DOSE 2 Count-" + s.available_capacity_dose2
-                        }}
-                      </td>
-                    </tr>
-                    <!-- <ul>
-                      <li *ngFor="let s of item.sessions">
-                        {{
-                          s.vaccine +
-                            " " +
-                            s.min_age_limit +
-                            " " +
-                            (config.dose1
-                              ? s.available_capacity_dose1
-                              : s.available_capacity_dose2)
-                        }}
-                      </li>
-                    </ul> -->
-                  </td>
-                </table>
+                <mat-icon
+                  style="cursor: pointer"
+                  (click)="copyPinCode(item.pincode)"
+                  >message</mat-icon
+                >
+              </div>
 
-                &nbsp;
-              </mat-list-item>
-            </mat-list>
+              <table fxFlex.gt-sm="50" fxFlex.lt-md="100">
+                <td>
+                  <tr style="border: 1px solid">
+                    <th style="border: 1px solid">Vaccine Name</th>
+                    <th style="border: 1px solid">Age Limit</th>
+                    <th style="border: 1px solid">
+                      {{ config.dose1 ? "DOSE 1" : "DOSE 2" }}
+                    </th>
+                  </tr>
+                  <tr *ngFor="let s of item.sessions">
+                    <td style="border: 1px solid">{{ s.vaccine }}</td>
+                    <td style="border: 1px solid">{{ s.min_age_limit }}</td>
+                    <td style="border: 1px solid">
+                      {{
+                        config.dose1
+                          ? "Count-" + s.available_capacity_dose1
+                          : "Count-" + s.available_capacity_dose2
+                      }}
+                    </td>
+                  </tr>
+                </td>
+              </table>
+
+              &nbsp;
+            </div>
           </mat-card-content>
         </mat-card>
         <hr />
-        <mat-card *ngIf="respList.b.length" fxFlex="90">
+        <mat-card *ngIf="respList.b.length" fxFlex="80">
           <mat-card-content>
-            <h3>Pin Code 2</h3>
-            <mat-list>
-              <mat-list-item
-                *ngFor="let item of respList.b; let i = index"
-                style="margin: 2rem"
-                fxFlexLayout="start"
-              >
-                <table fxFlex="40">
+            <h3><strong>Pin Code 2 </strong></h3>
+
+            <div
+              *ngFor="let item of respList.b; let i = index"
+              fxFlexLayout="center"
+              fxLayout.gt-sm="row"
+              fxLayout.lt-md="column"
+            >
+              <div fxFlex.gt-sm="40" fxFlex.lt-md="100" fxLayout="row">
+                <table>
                   <th style="text-align: left">
                     {{
                       i +
@@ -245,50 +269,40 @@
                         " " +
                         item.pincode
                     }}
-                    <button mat-mini-fab (click)="copyPinCode(item.pincode)">
-                      <mat-icon>bookmark</mat-icon>
-                    </button>
                   </th>
                 </table>
-                <table fxFlex="50">
-                  <td>
-                    <tr style="border: 1px solid">
-                      <th style="border: 1px solid">Vaccine Name</th>
-                      <th style="border: 1px solid">Age Limit</th>
-                      <th style="border: 1px solid">
-                        {{ config.dose1 ? "DOSE 1" : "DOSE 2" }}
-                      </th>
-                    </tr>
-                    <tr *ngFor="let s of item.sessions">
-                      <td style="border: 1px solid">{{ s.vaccine }}</td>
-                      <td style="border: 1px solid">{{ s.min_age_limit }}</td>
-                      <td style="border: 1px solid">
-                        {{
-                          config.dose1
-                            ? "DOSE 1 Count-" + s.available_capacity_dose1
-                            : "DOSE 2 Count-" + s.available_capacity_dose2
-                        }}
-                      </td>
-                    </tr>
-                    <!-- <ul>
-                    <li *ngFor="let s of item.sessions">
-                      {{
-                        s.vaccine +
-                          " " +
-                          s.min_age_limit +
-                          " " +
-                          (config.dose1
-                            ? s.available_capacity_dose1
-                            : s.available_capacity_dose2)
-                      }}
-                    </li>
-                  </ul> -->
-                  </td>
-                </table>
+                <mat-icon
+                  style="cursor: pointer"
+                  (click)="copyPinCode(item.pincode)"
+                  >message</mat-icon
+                >
+              </div>
 
-                &nbsp;
-              </mat-list-item>
-            </mat-list>
+              <table fxFlex.gt-sm="50" fxFlex.lt-md="100">
+                <td>
+                  <tr style="border: 1px solid">
+                    <th style="border: 1px solid">Vaccine Name</th>
+                    <th style="border: 1px solid">Age Limit</th>
+                    <th style="border: 1px solid">
+                      {{ config.dose1 ? "DOSE 1" : "DOSE 2" }}
+                    </th>
+                  </tr>
+                  <tr *ngFor="let s of item.sessions">
+                    <td style="border: 1px solid">{{ s.vaccine }}</td>
+                    <td style="border: 1px solid">{{ s.min_age_limit }}</td>
+                    <td style="border: 1px solid">
+                      {{
+                        config.dose1
+                          ? "Count-" + s.available_capacity_dose1
+                          : "Count-" + s.available_capacity_dose2
+                      }}
+                    </td>
+                  </tr>
+                </td>
+              </table>
+
+              &nbsp;
+            </div>
           </mat-card-content>
         </mat-card>
       </div>

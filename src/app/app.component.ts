@@ -22,7 +22,6 @@ export class AppComponent implements OnInit {
   stateList = {} as StateList;
   districtList = this.data.districtList;
   vaccineByPinRsp = {} as VaccineByPinList;
-  vaccineyDist: Center[] = [];
   date: string;
   pinCode: PinCodeModel = { is18Only: false } as PinCodeModel;
   pinCode2: PinCodeModel = { is18Only: false } as PinCodeModel;
@@ -103,7 +102,6 @@ export class AppComponent implements OnInit {
             }
           });
 
-          debugger;
           if (!this.pinCode.pinCode && !this.pinCode2.pinCode)
             return {
               a: clonedRes.filter((res) => res.sessions.length > 0),
@@ -182,6 +180,8 @@ export class AppComponent implements OnInit {
     this.spinner = false;
     this.stopAudio();
     clearInterval(this.interval);
+    this.respList.a = [];
+    this.respList.b = [];
   }
 
   copyPinCode(pin: string) {
