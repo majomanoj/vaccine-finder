@@ -1,23 +1,23 @@
 <div
   fxFlex="100"
   [ngStyle.gt-sm]="{
-    'margin-left': ' 2rem',
-    'margin-right': '2rem'
+    'margin-left': ' .5rem',
+    'margin-right': '.5rem'
   }"
   fxLayoutAlign="center"
 >
-  <mat-tab-group fxFlex="95" style="overflow-x: hidden">
+  <mat-tab-group fxFlex="100" style="overflow-x: hidden">
     <!-- <mat-tab label="pin" hidden="true">
-      <form>
-        <mat-form-field>
-          <mat-label>Pincode</mat-label>
-          <input matInput placeholder="pin" [(ngModel)]="pinCode" />
-        </mat-form-field>
-        <button mat-raised-button color="primary" (click)="searchByPin(pinCode)">
-          Search
-        </button>
-      </form>
-    </mat-tab> -->
+        <form>
+          <mat-form-field>
+            <mat-label>Pincode</mat-label>
+            <input matInput placeholder="pin" [(ngModel)]="pinCode" />
+          </mat-form-field>
+          <button mat-raised-button color="primary" (click)="searchByPin(pinCode)">
+            Search
+          </button>
+        </form>
+      </mat-tab> -->
     <mat-tab
       fxLayout="column"
       label="district"
@@ -32,20 +32,20 @@
       >
         <form fxLayout="column" fxFlex="100">
           <!-- <mat-form-field appearance="fill">
-            <mat-label>State</mat-label>
-            <mat-select
-              (valueChange)="getDistById($event)"
-              [(ngModel)]="stateCode"
-              name="stateCode"
-            >
-              <mat-option
-                *ngFor="let item of stateList.states"
-                [value]="item.state_id"
+              <mat-label>State</mat-label>
+              <mat-select
+                (valueChange)="getDistById($event)"
+                [(ngModel)]="stateCode"
+                name="stateCode"
               >
-                {{ item.state_name }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field> -->
+                <mat-option
+                  *ngFor="let item of stateList.states"
+                  [value]="item.state_id"
+                >
+                  {{ item.state_name }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field> -->
           <mat-form-field appearance="fill">
             <mat-label>District</mat-label>
             <mat-select [(ngModel)]="districtId" name="Center">
@@ -58,7 +58,13 @@
             </mat-select>
           </mat-form-field>
 
-          <div fxLayout="row" fxLayoutAlign="center stretch">
+          <div
+            fxLayout="row"
+            fxLayout.lt-md="column"
+            fxLayoutAlign="center stretch"
+            fxLayoutGap.gt-sm="2rem"
+            fxLayoutGap.lt-md=".5rem"
+          >
             <div>
               <mat-button-toggle-group
                 name="dose"
@@ -69,8 +75,22 @@
                 <mat-button-toggle [value]="false">Dose 2</mat-button-toggle>
               </mat-button-toggle-group>
             </div>
+
+            <div fxLayout="column">
+              <mat-form-field>
+                <mat-label>Min Count</mat-label>
+                <mat-select [(ngModel)]="config.minCount" name="minCount">
+                  <mat-option [value]="0">1 or more</mat-option>
+                  <mat-option [value]="1">2 or more</mat-option>
+                  <mat-option [value]="4">5 or more</mat-option>
+                  <mat-option [value]="9">10 or more</mat-option>
+                  <mat-option [value]="19">20 or more</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
             <div fxLayout="column">
               <mat-slider
+                color="primary"
                 fxLayoutAlign="start center"
                 min="10000"
                 max="120000"
@@ -79,7 +99,7 @@
                 name="timer"
               ></mat-slider>
               <div style="margin-top: -1rem" fxLayoutAlign="center">
-                timer:{{ config.timeInterval }}
+                timer:{{ config.timeInterval / 1000 }} sec
               </div>
             </div>
           </div>
@@ -103,7 +123,7 @@
                   <mat-label>Pincode set 1</mat-label>
                   <input
                     matInput
-                    placeholder="pin list 1"
+                    placeholder="12345,365675,.."
                     [(ngModel)]="pinCode.pinCode"
                     name="pinCode"
                   />
@@ -112,7 +132,7 @@
                   fxLayoutAlign.lt-md="center center"
                   name="18plus"
                   [(ngModel)]="pinCode.is18Only"
-                  >18 plus only</mat-checkbox
+                  >Age 18 only</mat-checkbox
                 >
               </div>
             </div>
@@ -126,7 +146,7 @@
                   <mat-label>Pincode set 2</mat-label>
                   <input
                     matInput
-                    placeholder="pin list 2"
+                    placeholder="12345,365675,.."
                     [(ngModel)]="pinCode2.pinCode"
                     name="pinCode2"
                   />
@@ -136,7 +156,7 @@
                   fxLayoutAlign.lt-md="center center"
                   name="18plus"
                   [(ngModel)]="pinCode2.is18Only"
-                  >18 plus only</mat-checkbox
+                  >Age 18 only</mat-checkbox
                 >
               </div>
             </div>
@@ -152,29 +172,26 @@
             <button
               mat-raised-button
               color="primary"
-              (click)="searchByDist(districtId)"
-            >
-              Search
-            </button>
-            <button
-              mat-raised-button
-              color="primary"
+              fxFlex="10"
+              fxFlex.lt-md="40"
               (click)="searchByDistloop(districtId)"
             >
-              Startloop
+              Start
             </button>
 
             <button
               mat-raised-button
               color="primary"
-              (click)="stopLoop(districtId)"
+              fxFlex="10"
+              fxFlex.lt-md="40"
+              (click)="stopLoop()"
             >
-              Stoploop
+              Stop
             </button>
           </div>
         </form>
         <mat-card *ngFor="let c of respList; let j = index" fxFlex="80">
-          <mat-card-content>
+          <mat-card-content *ngIf="c.length">
             <h3>
               <strong>Pin Code {{ j + 1 }} </strong>
             </h3>
@@ -229,12 +246,10 @@
                   </tr>
                 </td>
               </table>
-
-              &nbsp;
             </div>
+            <hr />
           </mat-card-content>
         </mat-card>
-        <hr />
       </div>
     </mat-tab>
   </mat-tab-group>

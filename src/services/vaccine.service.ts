@@ -41,7 +41,7 @@ export class VaccineService {
       headers: this.setHeader(),
     };
     return this.http.get<Vaccine>(VaccineUrl.SearchByDist, opts);
-    // return of(this.data.vaccineMock);
+    //  return of(this.data.vaccineMock);
   }
 
   setHeader() {

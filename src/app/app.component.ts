@@ -1,15 +1,11 @@
 import { Component, OnInit } from "@angular/core";
-import { MatSelectChange } from "@angular/material/select";
-import { DistrictList } from "src/models/district-info";
 import { VaccineByPinList } from "src/models/pincode-search";
 import { StateList } from "src/models/state-info";
 import { Center, Vaccine } from "src/models/vaccine-info";
 import { VaccineService } from "src/services/vaccine.service";
-import { filter, map, retry, timeInterval } from "rxjs/operators";
-import { interval } from "rxjs";
+import { map } from "rxjs/operators";
 import { Clipboard } from "@angular/cdk/clipboard";
 import { PinCodeModel } from "src/models/general";
-import { Session } from "src/models/vaccine-info";
 import { DataService } from "src/services/data.service";
 @Component({
   selector: "app-root",
@@ -17,9 +13,9 @@ import { DataService } from "src/services/data.service";
   styleUrls: ["./app.component.sass"],
 })
 export class AppComponent implements OnInit {
-  stateCode = 17;
-  config = { dose1: true, timeInterval: 60000 };
-  stateList = {} as StateList;
+  // stateCode = 17;
+  config = { dose1: true, timeInterval: 60000, minCount: 0 };
+  // stateList = {} as StateList;
   districtList = this.data.districtList;
   vaccineByPinRsp = {} as VaccineByPinList;
   date: string;
@@ -36,11 +32,15 @@ export class AppComponent implements OnInit {
     private data: DataService
   ) {}
   ngOnInit(): void {
-    this.audio = new Audio();
-    this.audio.src = "../../../assets/alert.mp3";
-    this.audio.load();
-    this.getAllStates();
+    this.loadAudioFile();
+    // this.getAllStates();
   }
+  private loadAudioFile() {
+    this.audio = new Audio();
+    this.audio.src = "../../../assets/alert.mpeg";
+    this.audio.load();
+  }
+
   getDate(): string {
     if (this.date) {
       return this.date;
@@ -72,7 +72,7 @@ export class AppComponent implements OnInit {
     this.audio.pause();
   }
   searchByDist(distIs: number) {
-    this.api
+    return this.api
       .getVaccineListByDistrict(distIs, this.getDate())
       .pipe(
         map((res) => {
@@ -84,8 +84,8 @@ export class AppComponent implements OnInit {
             let c2: Center = {};
             c.sessions = c.sessions.filter((s) =>
               this.config.dose1
-                ? s.available_capacity_dose1 > 0
-                : s.available_capacity_dose2 > 0
+                ? s.available_capacity_dose1 > this.config.minCount
+                : s.available_capacity_dose2 > this.config.minCount
             );
             if (c.sessions.length) {
               c1 = this.getCloneCenter(c);
@@ -106,57 +106,51 @@ export class AppComponent implements OnInit {
             return [...[clonedRes.filter((res) => res.sessions.length > 0)]];
           }
 
-          const listPinCodes1 = this.pinCode.pinCode
-            ?.replace(" ", "")
-            ?.split(",");
-          const listPinCodes2 = this.pinCode2.pinCode
-            ?.replace(" ", "")
-            ?.split(",");
-          const finalRes: any = [];
-          finalRes.push(
-            listPinCodes1
-              ? center1.filter(
-                  (res) =>
-                    res.sessions.length > 0 &&
-                    listPinCodes1.indexOf(res.pincode.toString()) >= 0
-                )
-              : []
-          );
-          finalRes.push(
-            listPinCodes2
-              ? center2.filter(
-                  (res) =>
-                    res.sessions.length > 0 &&
-                    listPinCodes2.indexOf(res.pincode.toString()) >= 0
-                )
-              : []
-          );
-          return finalRes;
+          return this.filterOutViaPinCode(center1, center2);
         })
       )
       .subscribe((res) => {
         this.respList = res;
-        if (res.length) {
+        if (res[0]?.length) {
           this.spinner = false;
           this.playSound();
-          setTimeout((res) => {
+          setTimeout(() => {
             this.stopAudio();
+            clearInterval(this.interval);
           }, 5000);
         }
       });
   }
 
-  getCloneOfCenters(centers: Center[]): Center[] {
-    return JSON.parse(JSON.stringify(centers));
+  private filterOutViaPinCode(center1: Center[], center2: Center[]) {
+    const listPinCodes1 = this.pinCode.pinCode?.replace(" ", "")?.split(",");
+    const listPinCodes2 = this.pinCode2.pinCode?.replace(" ", "")?.split(",");
+    const finalRes: any = [];
+    finalRes.push(
+      listPinCodes1
+        ? center1.filter(
+            (res) =>
+              res.sessions.length > 0 &&
+              listPinCodes1.indexOf(res.pincode.toString()) >= 0
+          )
+        : []
+    );
+    finalRes.push(
+      listPinCodes2
+        ? center2.filter(
+            (res) =>
+              res.sessions.length > 0 &&
+              listPinCodes2.indexOf(res.pincode.toString()) >= 0
+          )
+        : []
+    );
+    return finalRes;
   }
-  getCloneOfSessions(session: Session[]): Session[] {
-    return JSON.parse(JSON.stringify(session));
-  }
-  getCloneCenter(center: Center) {
-    return JSON.parse(JSON.stringify(center));
-  }
+
   searchByDistloop(distIs: number) {
     this.spinner = true;
+    this.searchByDist(distIs);
+
     this.interval = setInterval(() => {
       this.searchByDist(distIs);
     }, this.config.timeInterval);
@@ -173,13 +167,13 @@ export class AppComponent implements OnInit {
     });
   }
 
-  getAllStates() {
-    // this.api.getStateList().subscribe((res) => {
-    //   this.stateList = res;
-    // });
-  }
+  //getAllStates() {
+  // this.api.getStateList().subscribe((res) => {
+  //   this.stateList = res;
+  // });
+  //}
 
-  stopLoop(dist) {
+  stopLoop() {
     this.spinner = false;
     this.stopAudio();
     clearInterval(this.interval);
@@ -188,5 +182,13 @@ export class AppComponent implements OnInit {
 
   copyPinCode(pin: string) {
     this.clipboard.copy(pin);
+  }
+
+  private getCloneOfCenters(centers: Center[]): Center[] {
+    return JSON.parse(JSON.stringify(centers));
+  }
+
+  private getCloneCenter(center: Center) {
+    return JSON.parse(JSON.stringify(center));
   }
 }
