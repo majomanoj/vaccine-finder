@@ -28,7 +28,7 @@ export class AppComponent implements OnInit {
   districtId = 307;
   interval;
   audio;
-  respList: { a: Center[]; b: Center[] } = { a: [], b: [] };
+  respList: Center[][] = [];
   spinner: boolean = false;
   constructor(
     private api: VaccineService,
@@ -102,38 +102,41 @@ export class AppComponent implements OnInit {
             }
           });
 
-          if (!this.pinCode.pinCode && !this.pinCode2.pinCode)
-            return {
-              a: clonedRes.filter((res) => res.sessions.length > 0),
-              b: [],
-            };
+          if (!this.pinCode.pinCode && !this.pinCode2.pinCode) {
+            return [...[clonedRes.filter((res) => res.sessions.length > 0)]];
+          }
+
           const listPinCodes1 = this.pinCode.pinCode
             ?.replace(" ", "")
             ?.split(",");
           const listPinCodes2 = this.pinCode2.pinCode
             ?.replace(" ", "")
             ?.split(",");
-          return {
-            a: listPinCodes1
+          const finalRes: any = [];
+          finalRes.push(
+            listPinCodes1
               ? center1.filter(
                   (res) =>
                     res.sessions.length > 0 &&
                     listPinCodes1.indexOf(res.pincode.toString()) >= 0
                 )
-              : [],
-            b: listPinCodes2
+              : []
+          );
+          finalRes.push(
+            listPinCodes2
               ? center2.filter(
                   (res) =>
                     res.sessions.length > 0 &&
                     listPinCodes2.indexOf(res.pincode.toString()) >= 0
                 )
-              : [],
-          };
+              : []
+          );
+          return finalRes;
         })
       )
       .subscribe((res) => {
         this.respList = res;
-        if (res.a.length || res.b.length) {
+        if (res.length) {
           this.spinner = false;
           this.playSound();
           setTimeout((res) => {
@@ -180,8 +183,7 @@ export class AppComponent implements OnInit {
     this.spinner = false;
     this.stopAudio();
     clearInterval(this.interval);
-    this.respList.a = [];
-    this.respList.b = [];
+    this.respList = [];
   }
 
   copyPinCode(pin: string) {

@@ -115,13 +115,6 @@
                   >18 plus only</mat-checkbox
                 >
               </div>
-
-              <mat-icon
-                aria-hidden="false"
-                aria-label="Example home icon blob"
-                *ngIf="respList.a.length"
-                >arrow_back</mat-icon
-              >
             </div>
             <div fxLayoutAlign="center" fxFlex.lt-md="100">
               <div
@@ -146,12 +139,6 @@
                   >18 plus only</mat-checkbox
                 >
               </div>
-              <mat-icon
-                aria-hidden="false"
-                aria-label="Example home icon"
-                *ngIf="respList.b.length"
-                >arrow_back</mat-icon
-              >
             </div>
           </div>
           <div fxLayoutAlign="center" fxFlex="100" style="margin-bottom: 1rem">
@@ -186,12 +173,14 @@
             </button>
           </div>
         </form>
-        <mat-card *ngIf="respList.a.length" fxFlex="80">
+        <mat-card *ngFor="let c of respList; let j = index" fxFlex="80">
           <mat-card-content>
-            <h3><strong>Pin Code 1 </strong></h3>
+            <h3>
+              <strong>Pin Code {{ j + 1 }} </strong>
+            </h3>
 
             <div
-              *ngFor="let item of respList.a; let i = index"
+              *ngFor="let item of c; let i = index"
               fxFlexLayout="center"
               fxLayout.gt-sm="row"
               fxLayout.lt-md="column"
@@ -246,65 +235,6 @@
           </mat-card-content>
         </mat-card>
         <hr />
-        <mat-card *ngIf="respList.b.length" fxFlex="80">
-          <mat-card-content>
-            <h3><strong>Pin Code 2 </strong></h3>
-
-            <div
-              *ngFor="let item of respList.b; let i = index"
-              fxFlexLayout="center"
-              fxLayout.gt-sm="row"
-              fxLayout.lt-md="column"
-            >
-              <div fxFlex.gt-sm="40" fxFlex.lt-md="100" fxLayout="row">
-                <table>
-                  <th style="text-align: left">
-                    {{
-                      i +
-                        1 +
-                        " " +
-                        item.name +
-                        " " +
-                        item.block_name +
-                        " " +
-                        item.pincode
-                    }}
-                  </th>
-                </table>
-                <mat-icon
-                  style="cursor: pointer"
-                  (click)="copyPinCode(item.pincode)"
-                  >message</mat-icon
-                >
-              </div>
-
-              <table fxFlex.gt-sm="50" fxFlex.lt-md="100">
-                <td>
-                  <tr style="border: 1px solid">
-                    <th style="border: 1px solid">Vaccine Name</th>
-                    <th style="border: 1px solid">Age Limit</th>
-                    <th style="border: 1px solid">
-                      {{ config.dose1 ? "DOSE 1" : "DOSE 2" }}
-                    </th>
-                  </tr>
-                  <tr *ngFor="let s of item.sessions">
-                    <td style="border: 1px solid">{{ s.vaccine }}</td>
-                    <td style="border: 1px solid">{{ s.min_age_limit }}</td>
-                    <td style="border: 1px solid">
-                      {{
-                        config.dose1
-                          ? "Count-" + s.available_capacity_dose1
-                          : "Count-" + s.available_capacity_dose2
-                      }}
-                    </td>
-                  </tr>
-                </td>
-              </table>
-
-              &nbsp;
-            </div>
-          </mat-card-content>
-        </mat-card>
       </div>
     </mat-tab>
   </mat-tab-group>
