@@ -102,6 +102,15 @@
                 timer:{{ config.timeInterval / 1000 }} sec
               </div>
             </div>
+            <div fxLayout="column" fxLayoutAlign="center">
+              <button
+                style="min-width: 12rem"
+                mat-raised-button
+                (click)="pinCode2.show = !pinCode2.show"
+              >
+                {{ pinCode2.show ? "Close" : "Add" }} Pincode Set
+              </button>
+            </div>
           </div>
 
           <div
@@ -114,7 +123,6 @@
               fxLayoutAlign="center"
               fxFlex.lt-md="100"
               [ngStyle.gt-sm]="{
-                'border-right': '1px solid',
                 'padding-right': '.5rem'
               }"
             >
@@ -136,7 +144,15 @@
                 >
               </div>
             </div>
-            <div fxLayoutAlign="center" fxFlex.lt-md="100">
+            <div
+              fxLayoutAlign="center"
+              fxFlex.lt-md="100"
+              *ngIf="pinCode2.show"
+              [ngStyle.gt-sm]="{
+                'border-left': '1px solid',
+                'padding-left': '.5rem'
+              }"
+            >
               <div
                 fxLayoutGap="2rem"
                 fxLayout.lt-md="row"

@@ -20,7 +20,7 @@ export class AppComponent implements OnInit {
   vaccineByPinRsp = {} as VaccineByPinList;
   date: string;
   pinCode: PinCodeModel = { is18Only: false } as PinCodeModel;
-  pinCode2: PinCodeModel = { is18Only: false } as PinCodeModel;
+  pinCode2: PinCodeModel = { is18Only: false, show: false } as PinCodeModel;
   districtId = 307;
   interval;
   audio;
@@ -82,10 +82,14 @@ export class AppComponent implements OnInit {
           clonedRes.forEach((c) => {
             let c1: Center = {};
             let c2: Center = {};
-            c.sessions = c.sessions.filter((s) =>
-              this.config.dose1
-                ? s.available_capacity_dose1 > this.config.minCount
-                : s.available_capacity_dose2 > this.config.minCount
+            c.sessions = c.sessions.filter(
+              (s) =>
+                (this.config.dose1
+                  ? s.available_capacity_dose1 > this.config.minCount
+                  : s.available_capacity_dose2 > this.config.minCount) &&
+                (this.pinCode.is18Only && !this.pinCode2.show
+                  ? s.min_age_limit === 18
+                  : s.min_age_limit > 0)
             );
             if (c.sessions.length) {
               c1 = this.getCloneCenter(c);
@@ -105,7 +109,6 @@ export class AppComponent implements OnInit {
           if (!this.pinCode.pinCode && !this.pinCode2.pinCode) {
             return [...[clonedRes.filter((res) => res.sessions.length > 0)]];
           }
-
           return this.filterOutViaPinCode(center1, center2);
         })
       )
@@ -148,6 +151,7 @@ export class AppComponent implements OnInit {
   }
 
   searchByDistloop(distIs: number) {
+    this.stopLoop();
     this.spinner = true;
     this.searchByDist(distIs);
 
@@ -176,7 +180,9 @@ export class AppComponent implements OnInit {
   stopLoop() {
     this.spinner = false;
     this.stopAudio();
-    clearInterval(this.interval);
+    if (this.interval) {
+      clearInterval(this.interval);
+    }
     this.respList = [];
   }
 

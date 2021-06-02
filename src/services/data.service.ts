@@ -318,7 +318,7 @@ export class DataService {
             session_id: "20e79965-4627-429d-98fa-2f945faacefa",
             date: "29-05-2021",
             available_capacity: 0,
-            min_age_limit: 45,
+            min_age_limit: 18,
             vaccine: "COVISHIELD",
             slots: [
               "09:00AM-10:00AM",
