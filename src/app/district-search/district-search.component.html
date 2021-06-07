@@ -1,0 +1,145 @@
+<div
+  fxLayout="column"
+  fxFlex="100"
+  fxLayoutAlign="center"
+  style="overflow-x: hidden"
+>
+  <form fxLayout="column" fxFlex="100">
+    <app-filter [config]="config"></app-filter>
+    <div
+      fxLayoutAlign="center"
+      fxLayout.lt-md="column"
+      fxLayoutAlign.lt-md="center"
+      fxLayoutGap=".3rem"
+    >
+      <div
+        fxLayoutAlign="center"
+        fxFlex.lt-md="100"
+        [ngStyle.gt-sm]="{
+          'padding-right': '.5rem'
+        }"
+      >
+        <div fxLayoutGap="2rem" fxLayout.lt-md="row">
+          <mat-form-field appearance="outline">
+            <mat-label>Pincode set 1</mat-label>
+            <input
+              matInput
+              placeholder="12345,365675,.."
+              [(ngModel)]="pinCode.pinCode"
+              name="pinCode"
+            />
+          </mat-form-field>
+          <mat-checkbox
+            fxLayoutAlign.lt-md="center center"
+            name="18plus"
+            [(ngModel)]="pinCode.is18Only"
+            >Age 18 only</mat-checkbox
+          >
+        </div>
+      </div>
+      <div
+        fxLayoutAlign="center"
+        fxFlex.lt-md="100"
+        *ngIf="config.showPinCode2"
+        [ngStyle.gt-sm]="{
+          'border-left': '1px solid',
+          'padding-left': '.5rem'
+        }"
+      >
+        <div
+          fxLayoutGap="2rem"
+          fxLayout.lt-md="row"
+          fxLayoutAlign.lt-md="center center"
+        >
+          <mat-form-field appearance="outline">
+            <mat-label>Pincode set 2</mat-label>
+            <input
+              matInput
+              placeholder="12345,365675,.."
+              [(ngModel)]="pinCode2.pinCode"
+              name="pinCode2"
+            />
+          </mat-form-field>
+
+          <mat-checkbox
+            fxLayoutAlign.lt-md="center center"
+            name="18plus"
+            [(ngModel)]="pinCode2.is18Only"
+            >Age 18 only</mat-checkbox
+          >
+        </div>
+      </div>
+    </div>
+    <div fxLayoutAlign="center" fxFlex="100" style="margin-bottom: 1rem">
+      <mat-spinner
+        diameter="50"
+        fxLayoutAlign="center"
+        *ngIf="spinner"
+      ></mat-spinner>
+    </div>
+    <div fxLayoutAlign="center" fxLayoutGap="2rem">
+      <button
+        mat-raised-button
+        color="primary"
+        fxFlex="10"
+        fxFlex.lt-md="40"
+        (click)="searchByDistloop(districtId)"
+      >
+        Start
+      </button>
+
+      <button
+        mat-raised-button
+        color="primary"
+        fxFlex="10"
+        fxFlex.lt-md="40"
+        (click)="stopLoop()"
+      >
+        Stop
+      </button>
+    </div>
+  </form>
+  <mat-card *ngFor="let c of respList; let j = index" fxFlex="80">
+    <mat-card-content *ngIf="c.length">
+      <h3>
+        <strong>Pin Code {{ j + 1 }} </strong>
+      </h3>
+
+      <div
+        *ngFor="let item of c; let i = index"
+        fxFlexLayout="center"
+        fxLayout.gt-sm="row"
+        fxLayout.lt-md="column"
+      >
+        <app-result-name
+          [data]="item"
+          [i]="i"
+          [config]="config"
+        ></app-result-name>
+        <!-- <table fxFlex.gt-sm="50" fxFlex.lt-md="100">
+          <td>
+            <tr style="border: 1px solid">
+              <th style="border: 1px solid">Vaccine Name</th>
+              <th style="border: 1px solid">Age Limit</th>
+              <th style="border: 1px solid">
+                {{ config.dose1 ? "DOSE 1" : "DOSE 2" }}
+              </th>
+            </tr>
+            <tr *ngFor="let s of item.sessions">
+              <td style="border: 1px solid">{{ s.vaccine }}</td>
+              <td style="border: 1px solid">{{ s.min_age_limit }}</td>
+              <td style="border: 1px solid">
+                {{
+                  config.dose1
+                    ? "Count-" + s.available_capacity_dose1
+                    : "Count-" + s.available_capacity_dose2
+                }}
+              </td>
+            </tr>
+          </td>
+        </table> -->
+      </div>
+      <hr />
+    </mat-card-content>
+  </mat-card>
+</div>

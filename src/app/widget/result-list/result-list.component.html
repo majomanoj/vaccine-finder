@@ -1,0 +1,22 @@
+<table fxFlex.gt-sm="50" fxFlex.lt-md="100">
+  <td>
+    <tr style="border: 1px solid">
+      <th style="border: 1px solid">Vaccine Name</th>
+      <th style="border: 1px solid">Age Limit</th>
+      <th style="border: 1px solid">
+        {{ config.dose1 ? "DOSE 1" : "DOSE 2" }}
+      </th>
+    </tr>
+    <tr *ngFor="let s of data">
+      <td style="border: 1px solid">{{ s.vaccine }}</td>
+      <td style="border: 1px solid">{{ s.min_age_limit }}</td>
+      <td style="border: 1px solid">
+        {{
+          config.dose1
+            ? "Count-" + s.available_capacity_dose1
+            : "Count-" + s.available_capacity_dose2
+        }}
+      </td>
+    </tr>
+  </td>
+</table>

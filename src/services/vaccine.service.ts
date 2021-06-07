@@ -10,6 +10,7 @@ import { of } from "rxjs";
 import { Vaccine } from "src/models/vaccine-info";
 import { Observable } from "rxjs";
 import { DataService } from "./data.service";
+import { FindByDistrict } from "src/models/find-by-dist";
 @Injectable({
   providedIn: "root",
 })
@@ -42,6 +43,19 @@ export class VaccineService {
     };
     return this.http.get<Vaccine>(VaccineUrl.SearchByDist, opts);
     return of(this.data.vaccineMock);
+  }
+
+  getVaccineFindByDistrict(
+    districtId: number,
+    date: string
+  ): Observable<FindByDistrict> {
+    const opts = {
+      params: new HttpParams({
+        fromString: `district_id=${districtId}&date=${date}`,
+      }),
+      headers: this.setHeader(),
+    };
+    return this.http.get<FindByDistrict>(VaccineUrl.findByDist, opts);
   }
 
   setHeader() {

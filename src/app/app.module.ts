@@ -26,8 +26,13 @@ import { ClipboardModule } from "@angular/cdk/clipboard";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { MatSliderModule } from "@angular/material/slider";
 import { MatCheckboxModule } from "@angular/material/checkbox";
+import { FindByDistComponent } from './find-by-dist/find-by-dist.component';
+import { FilterComponent } from './filter/filter.component';
+import { DistrictSearchComponent } from './district-search/district-search.component';
+import { ResultListComponent } from './widget/result-list/result-list.component';
+import { ResultNameComponent } from './widget/result-name/result-name.component';
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, FindByDistComponent, FilterComponent, DistrictSearchComponent, ResultListComponent, ResultNameComponent],
   imports: [
     BrowserModule,
     HttpClientModule,

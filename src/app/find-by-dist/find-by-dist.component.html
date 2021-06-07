@@ -1,0 +1,31 @@
+<div fxLayoutAlign="center" fxLayout="column">
+  <app-filter [config]="config"></app-filter>
+  <mat-card fxFlex="100">
+    <mat-card-content fxLayout="column" fxLayoutAlign="center" fxFlex="100">
+      <!-- <div fxFlex="100" fxLayout="column" fxLayoutAlign="center center">
+        <p *ngFor="let item of rsp" fxFlex="100">
+          {{
+            item.name +
+              " " +
+              item.address +
+              " " +
+              item.pincode +
+              " " +
+              item.available_capacity_dose1 +
+              " " +
+              item.min_age_limit
+          }}
+        </p>
+      </div> -->
+      <div *ngFor="let item of rsp">
+        <app-result-name [data]="item" [config]="config"></app-result-name>
+      </div>
+
+      <div fxLayout="column" fxLayoutAlign="center" fxFlex="100">
+        <button mat-raised-button color="primary" (click)="getRsp()">
+          Search
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

@@ -1,0 +1,56 @@
+<form
+  fxLayout="row"
+  fxLayout.lt-md="column"
+  fxLayoutAlign="center stretch"
+  fxLayoutGap.gt-sm="2rem"
+  fxLayoutGap.lt-md=".5rem"
+  #form="ngForm"
+  style="margin: 1rem"
+>
+  <div>
+    <mat-button-toggle-group
+      name="dose"
+      [(ngModel)]="config.dose1"
+      aria-label="Font Style"
+    >
+      <mat-button-toggle [value]="true">Dose 1</mat-button-toggle>
+      <mat-button-toggle [value]="false">Dose 2</mat-button-toggle>
+    </mat-button-toggle-group>
+  </div>
+
+  <div fxLayout="column">
+    <mat-form-field>
+      <mat-label>Min Count</mat-label>
+      <mat-select [(ngModel)]="config.minCount" name="minCount">
+        <mat-option [value]="0">1 or more</mat-option>
+        <mat-option [value]="1">2 or more</mat-option>
+        <mat-option [value]="4">5 or more</mat-option>
+        <mat-option [value]="9">10 or more</mat-option>
+        <mat-option [value]="19">20 or more</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div fxLayout="column">
+    <mat-slider
+      color="primary"
+      fxLayoutAlign="start center"
+      min="10000"
+      max="120000"
+      step="10000"
+      [(ngModel)]="config.timeInterval"
+      name="timer"
+    ></mat-slider>
+    <div style="margin-top: -1rem" fxLayoutAlign="center">
+      timer:{{ config.timeInterval / 1000 }} sec
+    </div>
+  </div>
+  <div fxLayout="column" fxLayoutAlign="center">
+    <button
+      style="min-width: 12rem"
+      mat-raised-button
+      (click)="config.showPinCode2 = !config.showPinCode2"
+    >
+      {{ config.showPinCode2 ? "Close" : "Add" }} Pincode Set
+    </button>
+  </div>
+</form>
