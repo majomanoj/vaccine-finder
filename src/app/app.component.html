@@ -1,34 +1,37 @@
-<div
-  fxFlex="100"
-  [ngStyle.gt-sm]="{
-    'margin-left': ' .5rem',
-    'margin-right': '.5rem'
-  }"
-  fxLayoutAlign="center"
-  fxLayout="column"
->
-  <mat-form-field appearance="fill">
-    <mat-label>District</mat-label>
-    <mat-select [(ngModel)]="districtId" name="Center">
-      <mat-option
-        *ngFor="let item of districtList.districts"
-        [value]="item.district_id"
+<div fxLayout="column">
+  <div
+    fxFlex="100"
+    [ngStyle.gt-sm]="{
+      'margin-left': ' .5rem',
+      'margin-right': '.5rem'
+    }"
+    fxLayoutAlign="center"
+    fxLayout="column"
+  >
+    <mat-toolbar>Vaccine Finder</mat-toolbar>
+    <mat-form-field appearance="fill">
+      <mat-label>District</mat-label>
+      <mat-select [(ngModel)]="districtId" name="Center">
+        <mat-option
+          *ngFor="let item of districtList.districts"
+          [value]="item.district_id"
+        >
+          {{ item.district_name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-tab-group fxFlex="100" style="overflow-x: hidden">
+      <mat-tab
+        fxLayout="column"
+        label="district"
+        fxFlex="100"
+        fxLayoutAlign="center"
       >
-        {{ item.district_name }}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
-  <mat-tab-group fxFlex="100" style="overflow-x: hidden">
-    <mat-tab
-      fxLayout="column"
-      label="district"
-      fxFlex="100"
-      fxLayoutAlign="center"
-    >
-      <app-district-search [districtId]="districtId"></app-district-search>
-    </mat-tab>
-    <mat-tab label="findByDist">
-      <app-find-by-dist [districtId]="districtId"></app-find-by-dist>
-    </mat-tab>
-  </mat-tab-group>
+        <app-district-search [districtId]="districtId"></app-district-search>
+      </mat-tab>
+      <mat-tab label="findByDist">
+        <app-find-by-dist [districtId]="districtId"></app-find-by-dist>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
 </div>

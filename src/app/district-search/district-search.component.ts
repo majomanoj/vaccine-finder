@@ -113,7 +113,13 @@ export class DistrictSearchComponent implements OnInit {
           });
 
           if (!this.pinCode.pinCode && !this.pinCode2.pinCode) {
-            return [...[clonedRes.filter((res) => res.sessions.length > 0)]];
+            return [
+              ...[
+                clonedRes.filter(
+                  (res) => res.sessions.length > 0 && res.pincode != 685620
+                ),
+              ],
+            ];
           }
           return this.filterOutViaPinCode(center1, center2);
         })
@@ -125,7 +131,11 @@ export class DistrictSearchComponent implements OnInit {
           this.playSound();
           setTimeout(() => {
             this.stopAudio();
-            clearInterval(this.interval);
+            localStorage.setItem(
+              new Date().toDateString().replace(" ", ""),
+              JSON.stringify(res)
+            );
+            // clearInterval(this.interval);
           }, 5000);
         }
       });

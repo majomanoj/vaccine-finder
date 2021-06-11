@@ -17,6 +17,7 @@ import { MatTableModule } from "@angular/material/table";
 import { MatTabsModule } from "@angular/material/tabs";
 import { MatDialogModule } from "@angular/material/dialog";
 import { MatSlideToggleModule } from "@angular/material/slide-toggle";
+import { MatToolbarModule } from "@angular/material/toolbar";
 import { FlexLayoutModule } from "@angular/flex-layout";
 import { AppComponent } from "./app.component";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
@@ -26,13 +27,20 @@ import { ClipboardModule } from "@angular/cdk/clipboard";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { MatSliderModule } from "@angular/material/slider";
 import { MatCheckboxModule } from "@angular/material/checkbox";
-import { FindByDistComponent } from './find-by-dist/find-by-dist.component';
-import { FilterComponent } from './filter/filter.component';
-import { DistrictSearchComponent } from './district-search/district-search.component';
-import { ResultListComponent } from './widget/result-list/result-list.component';
-import { ResultNameComponent } from './widget/result-name/result-name.component';
+import { FindByDistComponent } from "./find-by-dist/find-by-dist.component";
+import { FilterComponent } from "./filter/filter.component";
+import { DistrictSearchComponent } from "./district-search/district-search.component";
+import { ResultListComponent } from "./widget/result-list/result-list.component";
+import { ResultNameComponent } from "./widget/result-name/result-name.component";
 @NgModule({
-  declarations: [AppComponent, FindByDistComponent, FilterComponent, DistrictSearchComponent, ResultListComponent, ResultNameComponent],
+  declarations: [
+    AppComponent,
+    FindByDistComponent,
+    FilterComponent,
+    DistrictSearchComponent,
+    ResultListComponent,
+    ResultNameComponent,
+  ],
   imports: [
     BrowserModule,
     HttpClientModule,
@@ -62,6 +70,7 @@ import { ResultNameComponent } from './widget/result-name/result-name.component'
     MatRadioModule,
     MatCardModule,
     BrowserAnimationsModule,
+    MatToolbarModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

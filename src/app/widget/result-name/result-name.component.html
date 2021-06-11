@@ -1,11 +1,19 @@
-<div fxFlex.gt-sm="40" fxFlex.lt-md="100" fxLayout="row">
-  <table>
-    <th style="text-align: left">
-      {{ i + 1 + " " + data.name + " " + data.block_name + " " + data.pincode }}
-    </th>
-  </table>
-  <mat-icon style="cursor: pointer" (click)="copyPinCode(data.pincode)"
-    >message</mat-icon
-  >
+<div fxFlex="100" fxLayout="row" fxLayoutAlign="start center">
+  <div fxLayout="row" fxFlex="40">
+    <table>
+      <th style="text-align: left">
+        {{
+          i + 1 + " " + data.name + " " + data.block_name + " " + data.pincode
+        }}
+      </th>
+    </table>
+    <mat-icon style="cursor: pointer" (click)="copyPinCode(data.pincode)"
+      >message</mat-icon
+    >
+  </div>
+  <app-result-list
+    fxFlex="60"
+    [data]="data.sessions"
+    [config]="config"
+  ></app-result-list>
 </div>
-<app-result-list [data]="data" [config]="config"></app-result-list>
