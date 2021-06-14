@@ -25,11 +25,11 @@ export class DistrictSearchComponent implements OnInit {
   // stateList = {} as StateList;
   districtList = this.data.districtList;
   vaccineByPinRsp = {} as VaccineByPinList;
-  date: string="";
+  date: string = "";
   pinCode: PinCodeModel = { is18Only: false } as PinCodeModel;
   pinCode2: PinCodeModel = { is18Only: false } as PinCodeModel;
 
-  interval =null;
+  interval = null;
   audio = null;
   respList: Center[][] = [];
   spinner: boolean = false;
@@ -96,14 +96,16 @@ export class DistrictSearchComponent implements OnInit {
                   : s.available_capacity_dose2 > this.config.minCount) &&
                 (this.pinCode.is18Only && !this.config.showPinCode2
                   ? s.min_age_limit === 18
-                  : s.min_age_limit > 0 && s.vaccine !== 'COVAXIN')
+                  : s.min_age_limit > 0 && s.vaccine !== "COVAXIN")
             );
             if (c.sessions.length) {
               c1 = this.getCloneCenter(c);
               c2 = this.getCloneCenter(c);
 
               if (this.pinCode.is18Only) {
-                c1.sessions = c1.sessions.filter((f) => f.min_age_limit === 18 && f.vaccine !== 'COVAXIN');
+                c1.sessions = c1.sessions.filter(
+                  (f) => f.min_age_limit === 18 && f.vaccine !== "COVAXIN"
+                );
               }
               if (this.pinCode2.is18Only) {
                 c2.sessions = c2.sessions.filter((f) => f.min_age_limit === 18);
@@ -114,13 +116,7 @@ export class DistrictSearchComponent implements OnInit {
           });
 
           if (!this.pinCode.pinCode && !this.pinCode2.pinCode) {
-            return [
-              ...[
-                clonedRes.filter(
-                  (res) => res.sessions.length > 0
-                ),
-              ],
-            ];
+            return [...[clonedRes.filter((res) => res.sessions.length > 0)]];
           }
           return this.filterOutViaPinCode(center1, center2);
         })
@@ -132,8 +128,14 @@ export class DistrictSearchComponent implements OnInit {
           this.playSound();
           setTimeout(() => {
             this.stopAudio();
+            const dt = new Date();
             localStorage.setItem(
-              new Date().toDateString().replace(" ", ""),
+              dt
+                .toDateString()
+                .replace(" ", "")
+                .concat(":")
+                .concat(dt.toTimeString())
+                .replace(" ", ""),
               JSON.stringify(res)
             );
             // clearInterval(this.interval);
