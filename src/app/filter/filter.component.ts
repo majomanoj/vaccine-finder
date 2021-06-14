@@ -11,7 +11,7 @@ import { NgForm } from "@angular/forms";
 @Component({
   selector: "app-filter",
   templateUrl: "./filter.component.html",
-  styleUrls: ["./filter.component.sass"],
+  styleUrls: ["./filter.component.scss"],
 })
 export class FilterComponent implements OnInit {
   @Input("config") config = {

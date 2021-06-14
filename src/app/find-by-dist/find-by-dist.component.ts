@@ -6,10 +6,10 @@ import { VaccineService } from "src/services/vaccine.service";
 @Component({
   selector: "app-find-by-dist",
   templateUrl: "./find-by-dist.component.html",
-  styleUrls: ["./find-by-dist.component.sass"],
+  styleUrls: ["./find-by-dist.component.scss"],
 })
 export class FindByDistComponent implements OnInit {
-  date: string;
+  date: string ="";
   rsp: Session[] = [];
   @Input("districtId") districtId: number;
   config = {

@@ -10,10 +10,11 @@ import { DataService } from "src/services/data.service";
 @Component({
   selector: "app-district-search",
   templateUrl: "./district-search.component.html",
-  styleUrls: ["./district-search.component.sass"],
+  styleUrls: ["./district-search.component.scss"],
 })
 export class DistrictSearchComponent implements OnInit {
-  @Input("districtId") districtId: number;
+  @Input("districtId")
+  districtId!: number;
   // stateCode = 17;
   config = {
     dose1: true,
@@ -24,12 +25,12 @@ export class DistrictSearchComponent implements OnInit {
   // stateList = {} as StateList;
   districtList = this.data.districtList;
   vaccineByPinRsp = {} as VaccineByPinList;
-  date: string;
+  date: string="";
   pinCode: PinCodeModel = { is18Only: false } as PinCodeModel;
   pinCode2: PinCodeModel = { is18Only: false } as PinCodeModel;
 
-  interval;
-  audio;
+  interval =null;
+  audio = null;
   respList: Center[][] = [];
   spinner: boolean = false;
   constructor(
@@ -43,7 +44,7 @@ export class DistrictSearchComponent implements OnInit {
   }
   private loadAudioFile() {
     this.audio = new Audio();
-    this.audio.src = "../../../assets/alert.mpeg";
+    this.audio.src = "../../../assets/alert.mp3";
     this.audio.load();
   }
 
@@ -95,14 +96,14 @@ export class DistrictSearchComponent implements OnInit {
                   : s.available_capacity_dose2 > this.config.minCount) &&
                 (this.pinCode.is18Only && !this.config.showPinCode2
                   ? s.min_age_limit === 18
-                  : s.min_age_limit > 0)
+                  : s.min_age_limit > 0 && s.vaccine !== 'COVAXIN')
             );
             if (c.sessions.length) {
               c1 = this.getCloneCenter(c);
               c2 = this.getCloneCenter(c);
 
               if (this.pinCode.is18Only) {
-                c1.sessions = c1.sessions.filter((f) => f.min_age_limit === 18);
+                c1.sessions = c1.sessions.filter((f) => f.min_age_limit === 18 && f.vaccine !== 'COVAXIN');
               }
               if (this.pinCode2.is18Only) {
                 c2.sessions = c2.sessions.filter((f) => f.min_age_limit === 18);
@@ -116,7 +117,7 @@ export class DistrictSearchComponent implements OnInit {
             return [
               ...[
                 clonedRes.filter(
-                  (res) => res.sessions.length > 0 && res.pincode != 685620
+                  (res) => res.sessions.length > 0
                 ),
               ],
             ];

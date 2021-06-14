@@ -1,18 +1,18 @@
-import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
-import { Injectable } from "@angular/core";
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 
-import { VaccineUrl } from "src/models/api-endpoints";
-import { DistrictList } from "src/models/district-info";
-import { VaccineByPinList } from "src/models/pincode-search";
-import { StateList } from "src/models/state-info";
-import { of } from "rxjs";
+import { VaccineUrl } from 'src/models/api-endpoints';
+import { DistrictList } from 'src/models/district-info';
+import { VaccineByPinList } from 'src/models/pincode-search';
+import { StateList } from 'src/models/state-info';
+import { of } from 'rxjs';
 
-import { Vaccine } from "src/models/vaccine-info";
-import { Observable } from "rxjs";
-import { DataService } from "./data.service";
-import { FindByDistrict } from "src/models/find-by-dist";
+import { Vaccine } from 'src/models/vaccine-info';
+import { Observable } from 'rxjs';
+import { DataService } from './data.service';
+import { FindByDistrict } from 'src/models/find-by-dist';
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root'
 })
 export class VaccineService {
   constructor(private http: HttpClient, private data: DataService) {}
@@ -20,9 +20,9 @@ export class VaccineService {
   getVaccineListByPin(pincode: string, date: string) {
     const opts = {
       params: new HttpParams({
-        fromString: `pincode=${pincode}&date=${date}`,
+        fromString: `pincode=${pincode}&date=${date}`
       }),
-      headers: this.setHeader(),
+      headers: this.setHeader()
     };
     return this.http.get<VaccineByPinList>(VaccineUrl.SearchBypin, opts);
   }
@@ -32,16 +32,16 @@ export class VaccineService {
   }
 
   getStateDistricts(id: string) {
-    return this.http.get<DistrictList>(VaccineUrl.DistrictList + "/" + id);
+    return this.http.get<DistrictList>(VaccineUrl.DistrictList + '/' + id);
   }
   getVaccineListByDistrict(districtId: number, date: string) {
     const opts = {
       params: new HttpParams({
-        fromString: `district_id=${districtId}&date=${date}`,
+        fromString: `district_id=${districtId}&date=${date}`
       }),
-      headers: this.setHeader(),
+      headers: this.setHeader()
     };
-    //  return this.http.get<Vaccine>(VaccineUrl.SearchByDist, opts);
+    return this.http.get<Vaccine>(VaccineUrl.SearchByDist, opts);
     return of(this.data.vaccineMock);
   }
 
@@ -51,9 +51,9 @@ export class VaccineService {
   ): Observable<FindByDistrict> {
     const opts = {
       params: new HttpParams({
-        fromString: `district_id=${districtId}&date=${date}`,
+        fromString: `district_id=${districtId}&date=${date}`
       }),
-      headers: this.setHeader(),
+      headers: this.setHeader()
     };
     return this.http.get<FindByDistrict>(VaccineUrl.findByDist, opts);
   }
@@ -61,8 +61,8 @@ export class VaccineService {
   setHeader() {
     let headers = new HttpHeaders();
     return (headers = headers.set(
-      "Content-Type",
-      "application/json; charset=utf-8"
+      'Content-Type',
+      'application/json; charset=utf-8'
     ));
   }
 }

@@ -3,16 +3,14 @@ import { Clipboard } from "@angular/cdk/clipboard";
 @Component({
   selector: "app-result-name",
   templateUrl: "./result-name.component.html",
-  styleUrls: ["./result-name.component.sass"],
+  styleUrls: ["./result-name.component.scss"],
 })
 export class ResultNameComponent implements OnInit, AfterViewInit {
-  @Input("data") data;
-  @Input("index") i;
-  @Input("config") config;
+  @Input("data") data:any;
+  @Input("index") i:any;
+  @Input("config") config:any;
   constructor(private clipboard: Clipboard) {}
   ngAfterViewInit(): void {
-    debugger;
-    console.log(this.data);
   }
 
   ngOnInit(): void {}
